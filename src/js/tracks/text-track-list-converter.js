@@ -11,6 +11,8 @@
  *
  * @param {TextTrack} track
  *        The text track to query.
+ * @param {Options} options
+  *        The main options from player.
  *
  * @return {Object}
  *         A serializable javascript representation of the TextTrack.
@@ -29,6 +31,9 @@ const trackToJson_ = function(track, options) {
     return acc;
   }, {
     cues: track.cues && Array.prototype.map.call(track.cues, function(cue) {
+
+      console.log(options.trackOffset);
+
       return {
         startTime: cue.startTime + options.trackOffset ? options.trackOffset : 0,
         endTime: cue.endTime + options.trackOffset ? options.trackOffset : 0,
