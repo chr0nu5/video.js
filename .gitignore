@@ -29,7 +29,7 @@ test/dist/*
 .coveralls.yml
 .sass-cache
 
-dist/*
+# dist/*
 es5/*
 
 .idea/
@@ -42,3 +42,5 @@ lang/zh-Han*.json
 
 # netlify deploy
 deploy/
+
+*.zip
