@@ -16,7 +16,7 @@
  *         A serializable javascript representation of the TextTrack.
  * @private
  */
-const trackToJson_ = function(track) {
+const trackToJson_ = function(track, options) {
   const ret = [
     'kind', 'label', 'language', 'id',
     'inBandMetadataTrackDispatchType', 'mode', 'src'
@@ -30,8 +30,8 @@ const trackToJson_ = function(track) {
   }, {
     cues: track.cues && Array.prototype.map.call(track.cues, function(cue) {
       return {
-        startTime: cue.startTime,
-        endTime: cue.endTime,
+        startTime: cue.startTime + options.trackOffset ? options.trackOffset : 0,
+        endTime: cue.endTime + options.trackOffset ? options.trackOffset : 0,
         text: cue.text,
         id: cue.id
       };
@@ -53,13 +53,13 @@ const trackToJson_ = function(track) {
  *         A serializable javascript representation of the {@link Tech}s
  *         {@link TextTrackList}.
  */
-const textTracksToJson = function(tech) {
+const textTracksToJson = function(tech, options) {
 
   const trackEls = tech.$$('track');
 
   const trackObjs = Array.prototype.map.call(trackEls, (t) => t.track);
   const tracks = Array.prototype.map.call(trackEls, function(trackEl) {
-    const json = trackToJson_(trackEl.track);
+    const json = trackToJson_(trackEl.track, options);
 
     if (trackEl.src) {
       json.src = trackEl.src;
@@ -69,7 +69,7 @@ const textTracksToJson = function(tech) {
 
   return tracks.concat(Array.prototype.filter.call(tech.textTracks(), function(track) {
     return trackObjs.indexOf(track) === -1;
-  }).map(trackToJson_));
+  }).map((track) => trackToJson_(track, options)));
 };
 
 /**
